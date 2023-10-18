@@ -2,9 +2,13 @@ import numpy as np
     
 class LogisticRegression:
     def __init__(self, lr, reg, norm_penalty):
-        # Initialize the weights and learning rate
-        self.w = None
+        # Initialize parameters
         self.lr = lr
+        self.max_iter = 2000
+        self.epoch_size = 100
+        self.stopping_threshold = 0.001
+        self.patience = 10
+        self.early_stopping = True
 
         # Set the gradient function based on the regularization
         if reg == 'l1':
@@ -28,11 +32,8 @@ class LogisticRegression:
 
         # Check for early stopping if accuracy on validation set stops improving
         accuracy = 0
-        patience = 10
-        threshold = 0.001
-        epoch_size = 100
 
-        for i in range(5000):
+        for i in range(self.max_iter):
             # Update weights using gradient descent
             a = np.dot(X_train, self.w)
             s = self.sigmoid(a)
@@ -40,19 +41,19 @@ class LogisticRegression:
 
             self.w -= self.lr*grad
 
-            # Check for early stopping every 100 iterations
-            if i % epoch_size == 0:
-                Y_pred = self.predict(X_val)
-                new_accuracy = np.mean(Y_pred == Y_val)
+            if self.early_stopping:
+                if i % self.epoch_size == 0:
+                    Y_pred = self.predict(X_val)
+                    new_accuracy = np.mean(Y_pred == Y_val)
 
-                if new_accuracy - accuracy < threshold:
-                    patience -= 1
-                else:
-                    accuracy = new_accuracy
-                    patience = 10
+                    if new_accuracy - accuracy < self.stopping_threshold:
+                        patience -= 1
+                    else:
+                        accuracy = new_accuracy
+                        patience = 10
 
-                if patience == 0:
-                    break
+                    if patience == 0:
+                        break
 
     def predict(self, X_test):
         X_test = self.intercept(X_test)
