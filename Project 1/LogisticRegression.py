@@ -4,7 +4,7 @@ class LogisticRegression:
     def __init__(self, lr, reg, norm_penalty, early_stopping=True):
         # Initialize parameters
         self.lr = lr
-        self.max_iter = 2000
+        self.max_iter = 1000
         self.epoch_size = 50
         self.stopping_threshold = 0.01
         self.patience = 5
