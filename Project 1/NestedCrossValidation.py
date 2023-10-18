@@ -65,7 +65,7 @@ class NestedCV:
 
     def k_fold_cross_validation(self, hyperparameters, X, Y):
         # Keep track of the accuracies for each model
-        accuracies = []
+        avg_accuracies = []
 
         for hyperparams in hyperparameters:
             # Create a fold generator
@@ -94,4 +94,11 @@ class NestedCV:
                 accuracies.append(accuracy)
 
             # Print the average accuracy for the model
+            avg_accuracies.append(np.mean(accuracies))
             print('Average accuracy for model with hyperparameters {}: {}'.format(hyperparams, np.mean(accuracies)))
+        
+        # Get the best hyperparameter combination
+        best_hyperparams = hyperparameters[np.argmax(avg_accuracies)]
+
+        # Return the model
+        return self.model(*best_hyperparams)

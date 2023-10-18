@@ -1,14 +1,14 @@
 import numpy as np
     
 class LogisticRegression:
-    def __init__(self, lr, reg, norm_penalty):
+    def __init__(self, lr, reg, norm_penalty, early_stopping=True):
         # Initialize parameters
         self.lr = lr
-        self.max_iter = 5000
-        self.epoch_size = 5
+        self.max_iter = 2000
+        self.epoch_size = 50
         self.stopping_threshold = 0.01
         self.patience = 5
-        self.early_stopping = True
+        self.early_stopping = early_stopping
 
         # Set the gradient function based on the regularization
         if reg == 'l1':
@@ -32,6 +32,9 @@ class LogisticRegression:
 
         # Check for early stopping if accuracy on validation set stops improving
         accuracy = 0
+        patience = self.patience
+        iterations = []
+        accuracies = []
 
         for i in range(self.max_iter):
             # Update weights using gradient descent
@@ -41,20 +44,23 @@ class LogisticRegression:
 
             self.w -= self.lr*grad
 
-            if self.early_stopping:
-                if i % self.epoch_size == 0:
-                    Y_pred = self.predict(X_val)
-                    new_accuracy = np.mean(Y_pred == Y_val)
+            if i % self.epoch_size == 0:
+                Y_pred = self.predict(X_val)
+                new_accuracy = np.mean(Y_pred == Y_val)
 
+                iterations.append(i)
+                accuracies.append(new_accuracy)
+
+                if self.early_stopping:
                     if new_accuracy - accuracy < self.stopping_threshold:
                         patience -= 1
                     else:
                         accuracy = new_accuracy
-                        patience = 10
+                        patience = self.patience
 
                     if patience == 0:
-                        print('Early stopping after {} iterations'.format(i))
-                        break
+                        return iterations, accuracies
+        return iterations, accuracies
 
     def predict(self, X_test):
         X_test = self.intercept(X_test)
