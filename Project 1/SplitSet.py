@@ -26,4 +26,26 @@ class KFoldSplitSet:
             X_test = X.iloc[test_indices]
 
             yield X_train, X_test, Y_train, Y_test
-    
+
+class SplitSet:
+    def __init__(self):
+        pass
+
+    def split(self, X, Y, test_size):
+        # Shuffle the data rows
+        indices = np.random.permutation(len(X))
+
+        stop_idx = round(test_size*X.shape[0])
+        test_indices = indices[0:stop_idx]
+        train_indices = indices[stop_idx:]
+
+        # Get the labels
+        Y_train = Y.iloc[train_indices]
+        Y_test = Y.iloc[test_indices]
+
+        # Get the features
+        X_train = X.iloc[train_indices]
+        X_test = X.iloc[test_indices]
+
+        return X_train, X_test, Y_train, Y_test
+

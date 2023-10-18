@@ -4,10 +4,10 @@ class LogisticRegression:
     def __init__(self, lr, reg, norm_penalty):
         # Initialize parameters
         self.lr = lr
-        self.max_iter = 2000
-        self.epoch_size = 100
-        self.stopping_threshold = 0.001
-        self.patience = 10
+        self.max_iter = 5000
+        self.epoch_size = 5
+        self.stopping_threshold = 0.01
+        self.patience = 5
         self.early_stopping = True
 
         # Set the gradient function based on the regularization
@@ -53,6 +53,7 @@ class LogisticRegression:
                         patience = 10
 
                     if patience == 0:
+                        print('Early stopping after {} iterations'.format(i))
                         break
 
     def predict(self, X_test):

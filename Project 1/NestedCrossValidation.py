@@ -1,5 +1,5 @@
 import numpy as np
-from SplitSet import KFoldSplitSet
+from SplitSet import KFoldSplitSet, SplitSet
 
 class NestedCV:
     def __init__(self, outer_folds, inner_folds, model, hyperparameter_grid):
@@ -64,6 +64,9 @@ class NestedCV:
         return list(set(model_hyperparameters))
 
     def k_fold_cross_validation(self, hyperparameters, X, Y):
+        # Keep track of the accuracies for each model
+        accuracies = []
+
         for hyperparams in hyperparameters:
             # Create a fold generator
             outer_K_Folds = KFoldSplitSet(folds=self.outer_folds)
@@ -73,9 +76,13 @@ class NestedCV:
 
             # For each of the 10 folds, get the train and test sets
             for X_train, X_test, Y_train, Y_test in outer_K_Folds.split(X, Y):
+                # Split the training set into train and validation sets
+                splits = SplitSet()
+                x_train, x_val, y_train, y_val = splits.split(X_train, Y_train, test_size=0.2)
+
                 # Train the model
                 model = self.model(*hyperparams)
-                model.fit(X_train, Y_train, X_test, Y_test)
+                model.fit(x_train, y_train, x_val, y_val)
 
                 # Get the predictions
                 Y_pred = model.predict(X_test)

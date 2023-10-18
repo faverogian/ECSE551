@@ -5,13 +5,13 @@ import itertools
 
 ''' Data Preprocessing '''
 # Load the data
-mushroom_set = pd.read_csv('Mushroom.csv')
-mushroom_headers = ['Poisonous', 'Cap-shape', 'Cap-surface', 'Cap-color', 'Bruises', 'Odor', 'Gill-attachment',  'Gill-spacing', 'Gill-size', 'Gill-color', 'Stalk-color-below-ring', 'Class']
-mushroom_set.columns = mushroom_headers
+hepatitis_set = pd.read_csv('Hepatits.csv')
+hepatitis_headers = ['Ascites', 'Varices', 'Bilirubin', 'Alk Phosphate', 'Sgot', 'Albumin', 'Protime', 'Histology', 'Class']
+hepatitis_set.columns = hepatitis_headers
 
 # Get the labels from last column
-X = mushroom_set.iloc[:, :-1]
-Y = mushroom_set.iloc[:, -1]
+X = hepatitis_set.iloc[:, :-1]
+Y = hepatitis_set.iloc[:, -1]
 
 ''' Training the model '''
 hyperparameters = {
