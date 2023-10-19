@@ -1,5 +1,6 @@
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
+from NestedCrossValidation import NestedCV
 import pandas as pd
 
 # Load the data
@@ -11,24 +12,23 @@ mushroom_set.columns = mushroom_headers
 X = mushroom_set.iloc[:, :-1]
 Y = mushroom_set.iloc[:, -1]
 
-# Define hyperparameters for tuning
-hyperparameters = {
-    'C': [0.001, 0.01, 0.1, 0.3, 0.5, 0.8],
-    'penalty': ['l1', 'l2']
-}
+# Create L1 model
+l1_model = LogisticRegression(penalty='l1', solver='liblinear')
+l1_accuracy = NestedCV(outer_folds=10).k_fold_cross_validation2(l1_model, X, Y)
 
-# Create a logistic regression model
-model = LogisticRegression(max_iter=2000, solver='liblinear')
+# Create L2 model
+l2_model = LogisticRegression(penalty='l2', solver='liblinear')
+l2_accuracy = NestedCV(outer_folds=10).k_fold_cross_validation2(l2_model, X, Y)
 
-# Create a GridSearchCV object with 10-fold cross-validation
-grid_search = GridSearchCV(model, hyperparameters, scoring='accuracy', cv=10)
+# Create no regularization model
+no_reg_model = LogisticRegression(penalty='none', solver='lbfgs')
+no_reg_accuracy = NestedCV(outer_folds=10).k_fold_cross_validation2(no_reg_model, X, Y)
 
-# Fit the GridSearchCV object to your data
-grid_search.fit(X, Y)
+# Print the accuracies
+print("L1 Accuracy: ", l1_accuracy)
+print("L2 Accuracy: ", l2_accuracy)
+print("No Regularization Accuracy: ", no_reg_accuracy)
 
-# Print the best hyperparameters and the corresponding accuracy
-best_hyperparameters = grid_search.best_params_
-best_accuracy = grid_search.best_score_
 
-print(f"Best Hyperparameters: {best_hyperparameters}")
-print(f"Best Accuracy: {best_accuracy}")
+
+
