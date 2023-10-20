@@ -5,7 +5,7 @@ class KFoldSplitSet:
         self.folds = folds
 
     def split(self, X, Y):
-        # Shuffle the data rows with a random seed
+        # Shuffle the data rows
         np.random.seed(15)
         indices = np.random.permutation(len(X))
 
@@ -33,7 +33,7 @@ class SplitSet:
         pass
 
     def split(self, X, Y, test_size):
-        # Shuffle the data rows with a random seed
+        # Shuffle the data rows
         np.random.seed(15)
         indices = np.random.permutation(len(X))
 
