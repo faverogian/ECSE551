@@ -31,7 +31,8 @@ class LogisticRegression:
         # Add intercept to training data
         x_train = self.intercept(X_train)
 
-        # weights initialization to random values
+        # weights initialization to random values with a random seed
+        np.random.seed(15)
         self.w = np.random.randn(x_train.shape[1])
 
         # Check for early stopping if accuracy on validation set stops improving
