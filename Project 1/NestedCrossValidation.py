@@ -1,13 +1,12 @@
 import numpy as np
 from SplitSet import KFoldSplitSet, SplitSet
 
+def Accu_eval(Y_pred, Y_test):
+    return np.mean(Y_pred == Y_test)
+
 class NestedCV:
     def __init__(self, outer_folds):
         self.outer_folds = outer_folds
-
-    def accuracy_score(self, Y_pred, Y_test):
-        accuracy = np.mean(Y_pred == Y_test)
-        return accuracy
     
     def k_fold_cross_validation(self, model, X, Y):
         # Create a fold generator
@@ -28,7 +27,7 @@ class NestedCV:
             Y_pred = model.predict(X_test)
 
             # Get the accuracy on the test set
-            accuracy = self.accuracy_score(Y_pred, Y_test)
+            accuracy = Accu_eval(Y_pred, Y_test)
 
             # Add the accuracy to the list
             accuracies.append(accuracy)
