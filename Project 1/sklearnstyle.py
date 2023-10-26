@@ -12,6 +12,16 @@ mushroom_set.columns = mushroom_headers
 X = mushroom_set.iloc[:, :-1]
 Y = mushroom_set.iloc[:, -1]
 
+# Do a PCA on the X values
+from sklearn.decomposition import PCA
+pca = PCA(n_components=5)
+
+# Fit the PCA to the data
+pca.fit(X)
+
+# Get the transformed data as a pandas dataframe
+X = pd.DataFrame(pca.transform(X))
+
 # Create L1 model
 l1_model = LogisticRegression(penalty='l1', solver='liblinear')
 l1_accuracy = NestedCV(outer_folds=10).k_fold_cross_validation2(l1_model, X, Y)
