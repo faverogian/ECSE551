@@ -224,7 +224,6 @@ begin
 action
 government
 gaslighting
-canadian
 solution
 immigration
 federal
@@ -267,7 +266,6 @@ rental
 demolition
 protection
 threat
-province
 wwwolaorg
 legislative
 bill
@@ -519,7 +517,6 @@ timeline
 later
 ontario's
 ministry
-infrastructure
 relocate
 ontario
 state
@@ -543,6 +540,7 @@ breakeven
 slightly
 profitable
 improve
+infrastructure
 kill
 reckless
 cadeath
@@ -692,7 +690,6 @@ argument
 mad
 lad
 suggest
-system
 connection
 monumentally
 stupid
@@ -714,7 +711,6 @@ scenario
 investor
 gather
 %
-downtown
 someimpressive
 nathan
 philip
@@ -777,9 +773,7 @@ alternative
 ie
 senior
 easier
-bike
 anyfeel
-allow
 protect
 along
 mention
@@ -938,7 +932,6 @@ special
 hotenant
 prioritize
 ltb
-claim
 anyway
 fantasy
 happen
@@ -1103,7 +1096,6 @@ honk
 nearly
 dozen
 popular
-class
 disproportionally
 minority
 crime
@@ -1858,7 +1850,6 @@ confidential
 circular
 material
 carve
-choose
 liaison
 interactive
 respondent
@@ -1943,6 +1934,7 @@ community
 wireless
 g
 text
+system
 fake
 brighter
 await
@@ -3750,7 +3742,6 @@ vin
 syncope
 ratp
 satisfont
-peux
 toujours
 prendre
 velo
@@ -3768,7 +3759,6 @@ tendance
 auschers
 apc
 balibaris
-probleme
 recommande
 magasin
 s'appelle
@@ -3778,7 +3768,6 @@ resto
 croise
 desagreables
 parlaient
-entre
 s'ils
 etaient
 tarmac
@@ -3834,11 +3823,9 @@ soucis
 effectivement
 ghetto
 essayant
-voir
 l'occasion
 partir
 villette
-cette
 verras
 meme
 tellement
@@ -3888,7 +3875,6 @@ ausl'interieur
 rejoindre
 ensuite
 faudrait
-autre
 n'etres
 clair
 voulais
@@ -3980,7 +3966,6 @@ princesse
 plastique
 tenait
 ostensiblement
-deux
 moignons
 cela
 imago
@@ -4138,6 +4123,7 @@ cercle
 l'enfer
 vienne
 serieusement
+probleme
 correctly
 application
 cite
@@ -4313,7 +4299,6 @@ reboulot
 bout
 finit
 partenaire
-qu'on
 detester
 nouvelles
 idees
@@ -4666,11 +4651,10 @@ oublier
 renouveler
 abonnement
 echeance
-exactement
+saexactement
 combien
 chaque
-pouvoir
-adapter
+pouadapter
 frequentee
 verra
 nombre
@@ -5006,8 +4990,7 @@ facilite
 milliers
 d'etrangers
 durent
-prevoir
-gros
+pregros
 retarde
 gere
 risques
@@ -5092,6 +5075,7 @@ jusqu'en
 precise
 ministere
 radar
+sabout
 placer
 symforcement
 passent
@@ -5562,6 +5546,7 @@ hurlent
 voyageurs
 debarrasser
 declencheur
+exactement
 balance
 patates
 remet
@@ -5669,6 +5654,7 @@ arrache
 pousse
 assise
 t'ecoutes
+gros
 quasi
 fond
 bouscule
@@ -5972,6 +5958,7 @@ gueule
 essayaient
 monter
 mourir
+pouvoir
 respirer
 arrets
 echauffer
@@ -6299,7 +6286,7 @@ penser
 su
 laissant
 cingle
-reflexe
+n'areflexe
 pauvre
 appele
 sideree
@@ -6568,6 +6555,7 @@ mecaniques
 entree
 marchant
 trottoir
+autre
 appointment
 unserviceable
 refresh
@@ -6790,9 +6778,10 @@ clinique
 dermatologie
 privee
 pricey
-fullclass
+fulldefinitely
 necessary
 proactive
+fullvariety
 incourse
 registration
 significantly
@@ -7070,6 +7059,7 @@ fleuve
 baigner
 pancartes
 baignade
+pouprofiter
 sauveteurs
 riviere
 prairie
@@ -7090,6 +7080,7 @@ ordure
 nb
 nettoyante
 derangerait
+depayer
 elles
 propres
 masse
@@ -7357,6 +7348,7 @@ l'effort
 exceptionnel
 merite
 pourboire
+province
 francizisation
 dawson
 curriculum
