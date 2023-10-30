@@ -155,3 +155,14 @@ def plot_conf_mat(conf_mat):
     plt.xlabel('Predicted label')
     plt.ylabel('True label')
     plt.show()
+
+def generate_kaggle_submission(kaggle_test, kaggle_test_pred):
+    kaggle_test_dict = {
+    'id': kaggle_test['id'],
+    'subreddit': kaggle_test_pred
+    }
+
+    kaggle_test_df = pd.DataFrame(kaggle_test_dict)
+    kaggle_test_df['subreddit'] = kaggle_test_df['subreddit'].map({0: 'Toronto', 1: 'London', 2: 'Paris', 3: 'Montreal'})
+
+    return kaggle_test_df
