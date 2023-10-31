@@ -139,6 +139,36 @@ def get_mutual_information(term_freq_df, class_count):
 
      return MI
 
+def remove_common_words(df, subreddits, thresh):
+    # Build vocabulary of words
+    vocab = build_vocab(df)
+
+    # Get the frequency of each word in the vocabulary (how many samples it appears in)
+    subdict = {}
+    for subreddit in subreddits:
+        subdict[subreddit] = get_highest_freq(subreddit, df)
+    for key in subdict:
+        subdict[key] = [item[0] for item in subdict[key]]
+
+    # Get aggregate index of words in the vocabulary
+    agg_index = {}
+    for word in vocab:
+        agg_index[word] = 0
+        for key in subdict:
+            if word in subdict[key]:
+                agg_index[word] += subdict[key].index(word)
+            else:
+                agg_index[word] += len(subdict[key])
+    agg_index = dict(sorted(agg_index.items(), key=lambda item: item[1], reverse=False))
+
+    # Remove these most common words from the vocabulary
+    for word in list(agg_index)[:thresh]:
+        vocab.remove(word)
+
+    df['body'] = [' '.join(word for word in sample.split() if word in vocab) for sample in df['body']]
+
+    return df
+
 #### TESTING HELPER FUNCTIONS ####
 
 # Create function to plot a confusion matrix
@@ -166,3 +196,37 @@ def generate_kaggle_submission(kaggle_test, kaggle_test_pred):
     kaggle_test_df['subreddit'] = kaggle_test_df['subreddit'].map({0: 'Toronto', 1: 'London', 2: 'Paris', 3: 'Montreal'})
 
     return kaggle_test_df
+
+def mutual_info_transform(df, thresh):
+    vocab = build_vocab(df)
+
+    classes = df['subreddit'].unique()
+    class_counts = df['subreddit'].value_counts().to_numpy()
+
+    term_freq = {}
+    for subreddit in classes:
+        term_freq[subreddit] = get_term_freq(df, subreddit, vocab)
+        
+    # Make a dataframe of the term frequencies
+    term_freq_df = pd.DataFrame.from_dict(term_freq, orient='index')
+    term_freq_df = term_freq_df.transpose()
+
+    # Create a dataframe of the mutual information
+    MI = get_mutual_information(term_freq_df, class_counts)
+    MI_df = pd.DataFrame(MI, columns=['MI'])
+    MI_df['word'] = list(vocab)
+    MI_df = MI_df.sort_values(by=['MI'], ascending=False)
+
+    # Create a list of the top words based on MI
+    MI_N = thresh
+    MI_df_top = MI_df.head(MI_N)
+    top_words = MI_df_top['word'].tolist()
+
+    # Create a new dataframe with only the top words
+    top_df = df.copy()
+    top_df['body'] = top_df['body'].apply(lambda x: ' '.join([word for word in x.split() if word in top_words]))
+
+    # Remove samples with no words
+    top_df = top_df[top_df['body'] != '']
+
+    return top_df, top_words
