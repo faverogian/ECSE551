@@ -37,8 +37,8 @@ def prep_data(df):
     df['body'] = df['body'].str.replace('-', ' ')
     df['body'] = df['body'].str.replace('%', ' ')
 
-    # Remove basic punctuation
-    translator = str.maketrans('', '', '<>"°œ!\()*+,.:;=?[\\]^_`{|}~1234567890')
+    chars_to_replace = '<>"°œ!\\()*+,.:;=?[\\]^_`{|}~1234567890'
+    translator = str.maketrans(chars_to_replace, ' ' * len(chars_to_replace))
     df['body'] = df['body'].str.translate(translator)
 
     # Replace accented characters with unaccented characters
@@ -58,6 +58,9 @@ def prep_data(df):
     df['body'] = df['body'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
     stop_words = set(stopwords.words('french'))
     df['body'] = df['body'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
+
+    # Do some word replacement to boost class separability
+    mtl_words = ['mtl', 'quebec', '']
 
     return df
 
@@ -129,7 +132,7 @@ def get_mutual_information(term_freq_df, class_count):
      P_T_notC = (np.array(class_count).reshape(1, -1) - term_freq_array + eps) / np.array(class_count).reshape(1, -1)
 
      # Calculate the marginal probabilities
-     total_samples = 540
+     total_samples = np.sum(class_count)
      P_T = np.sum(term_freq_array, axis=1) / total_samples
      P_C = class_count / total_samples
 
@@ -167,7 +170,7 @@ def remove_common_words(df, subreddits, thresh):
 
     df['body'] = [' '.join(word for word in sample.split() if word in vocab) for sample in df['body']]
 
-    return df
+    return df, vocab
 
 #### TESTING HELPER FUNCTIONS ####
 
@@ -193,7 +196,6 @@ def generate_kaggle_submission(kaggle_test, kaggle_test_pred):
     }
 
     kaggle_test_df = pd.DataFrame(kaggle_test_dict)
-    kaggle_test_df['subreddit'] = kaggle_test_df['subreddit'].map({0: 'Toronto', 1: 'London', 2: 'Paris', 3: 'Montreal'})
 
     return kaggle_test_df
 
@@ -229,4 +231,4 @@ def mutual_info_transform(df, thresh):
     # Remove samples with no words
     top_df = top_df[top_df['body'] != '']
 
-    return top_df, top_words
+    return top_df
