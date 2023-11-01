@@ -10,6 +10,77 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
 
+#### Vocab ####
+
+mtl_associations = [
+    "canadiens",
+    "bagel",
+    "poutine",
+    "mtl",
+    "yul",
+    "muc",
+    "stm",
+    "udem",
+    "mcgill",
+    "chum",
+    "quebec",
+    "qc",
+    "fleurdelisé",
+    "carnaval",
+    "chateau",
+    "vieuxquebec",
+    "lacsaintjean",
+    "gaspe",
+    "peninsula",
+    "saint",
+    "jean",
+    "baptiste",
+    "bonhomme"
+    ]
+tor_associations = [
+    "jays",
+    "raptors",
+    "cntower",
+    "the6ix",
+    "tdot",
+    "scarborough",
+    "etobicoke",
+    "vaughan",
+    "yorkville",
+    "annex",
+    "kensington",
+    "distillery",
+    "ford",
+    "tory",
+    "drake",
+    "ttc",
+    "uoft",
+    "tor",
+    "ryerson",
+    "york",
+    "leafs",
+]
+london_associations = [
+    "uk",
+    "britain",
+    "british",
+    "england",
+    "queen",
+    "king",
+    "brit",
+    "mate",
+    "soho",
+    "bbc",
+    "flat"
+]
+paris_associations = [
+    "france",
+    "eiffel",
+    "louvre",
+    "macron",
+    "fr"
+]
+
 #### PREPROCESSING HELPER FUNCTIONS ####
 
 # Replace words with their lemmings
@@ -59,9 +130,15 @@ def prep_data(df):
     stop_words = set(stopwords.words('french'))
     df['body'] = df['body'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
 
-    # Do some word replacement to boost class separability
-    mtl_words = ['mtl', 'quebec', '']
+    return df
 
+def word_replacement(df):
+    # Replace words in df with their associated words
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in mtl_associations else 'montreal' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in tor_associations else 'toronto' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in london_associations else 'london' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in paris_associations else 'paris' for word in x.split()]))
+    
     return df
 
 def get_term_freq(df, subreddit, vocab):
@@ -167,6 +244,8 @@ def remove_common_words(df, subreddits, thresh):
     # Remove these most common words from the vocabulary
     for word in list(agg_index)[:thresh]:
         vocab.remove(word)
+    
+    vocab.extend(['montreal', 'toronto', 'london', 'paris'])
 
     df['body'] = [' '.join(word for word in sample.split() if word in vocab) for sample in df['body']]
 
@@ -223,6 +302,7 @@ def mutual_info_transform(df, thresh):
     MI_N = thresh
     MI_df_top = MI_df.head(MI_N)
     top_words = MI_df_top['word'].tolist()
+    top_words.extend(['montreal', 'toronto', 'london', 'paris'])
 
     # Create a new dataframe with only the top words
     top_df = df.copy()
