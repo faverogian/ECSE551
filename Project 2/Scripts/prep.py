@@ -15,6 +15,10 @@ warnings.filterwarnings('ignore')
 mtl_associations = [
     "canadiens",
     "bagel",
+    "anglophone",
+    "anglophones",
+    "francophone",
+    "francophones",
     "poutine",
     "mtl",
     "yul",
@@ -44,6 +48,7 @@ tor_associations = [
     "the6ix",
     "tdot",
     "scarborough",
+    "mississauga",
     "willowdale",
     "chow",
     "ndp",
@@ -62,6 +67,7 @@ tor_associations = [
     "ryerson",
     "york",
     "leafs",
+    "ontario"
 ]
 london_associations = [
     "uk",
