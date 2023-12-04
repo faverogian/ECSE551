@@ -17,6 +17,7 @@ import math
 import torch.nn.functional as F
 
 from vgg5 import VGG
+from spinal_vgg5 import SpinalVGG
 
 class Hyperparameters():
     batch_size = 64
@@ -25,6 +26,7 @@ class Hyperparameters():
     learning_rate = 0.001
     momentum = 0.9
     criterion = nn.CrossEntropyLoss()
+    model = 'spinal-vgg5'
 
 class CustomDataset(Dataset):
     def __init__(self, data, targets, transform=None):
@@ -89,7 +91,10 @@ train_loader = DataLoader(train_dataset, batch_size=HP.batch_size, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=HP.batch_size, shuffle=True)
     
 # Create model
-model = VGG().to(device)
+if HP.model == 'spinal-vgg5':
+    model = SpinalVGG().to(device)
+elif HP.model == 'vgg5':
+    model = VGG().to(device)
 
 # Define optimizer
 optimizer = torch.optim.Adam(model.parameters(), lr=HP.learning_rate)

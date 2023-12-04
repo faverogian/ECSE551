@@ -17,6 +17,7 @@ import math
 import torch.nn.functional as F
 
 from vgg5 import VGG
+from spinal_vgg5 import SpinalVGG
 
 class Hyperparameters():
     batch_size = 64
@@ -25,6 +26,7 @@ class Hyperparameters():
     learning_rate = 0.001
     momentum = 0.9
     criterion = nn.CrossEntropyLoss()
+    model = 'spinal-vgg5'
 
 class CustomDataset(Dataset):
     def __init__(self, data, transform=None):
@@ -64,10 +66,13 @@ test_dataset = CustomDataset(data, transform=test_transforms)
 test_loader = DataLoader(test_dataset, batch_size=HP.batch_size, shuffle=False)
     
 # Create model
-model = VGG().to(device)
+if HP.model == 'spinal-vgg5':
+    model = SpinalVGG().to(device)
+elif HP.model == 'vgg5':
+    model = VGG().to(device)
 
 # Load model
-model.load_state_dict(torch.load('models/vgg5.ckpt'))
+model.load_state_dict(torch.load(f'models/{HP.model}.ckpt'))
 
 # Generate labels for test set
 model.eval()
