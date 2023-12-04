@@ -153,4 +153,4 @@ for epoch in range(HP.epochs):
 
         print(f'Epoch [{epoch+1}/{HP.epochs}], Val Loss: {epoch_loss:.4f}, Val Acc: {100 * correct / total:.4f}')
 
-torch.save(model.state_dict(), 'models/vgg5.ckpt')
+torch.save(model.state_dict(), f'models/{HP.model}.ckpt')
