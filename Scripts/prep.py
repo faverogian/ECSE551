@@ -10,6 +10,86 @@ import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
 
+#### Vocab ####
+
+mtl_associations = [
+    "canadiens",
+    "bagel",
+    "anglophone",
+    "anglophones",
+    "francophone",
+    "francophones",
+    "poutine",
+    "mtl",
+    "yul",
+    "muc",
+    "stm",
+    "udem",
+    "mcgill",
+    "chum",
+    "quebec",
+    "qc",
+    "fleurdelisé",
+    "carnaval",
+    "chateau",
+    "vieuxquebec",
+    "lacsaintjean",
+    "gaspe",
+    "peninsula",
+    "saint",
+    "jean",
+    "baptiste",
+    "bonhomme"
+    ]
+tor_associations = [
+    "jays",
+    "raptors",
+    "cntower",
+    "the6ix",
+    "tdot",
+    "scarborough",
+    "mississauga",
+    "willowdale",
+    "chow",
+    "ndp",
+    "etobicoke",
+    "vaughan",
+    "yorkville",
+    "annex",
+    "kensington",
+    "distillery",
+    "ford",
+    "tory",
+    "drake",
+    "ttc",
+    "uoft",
+    "tor",
+    "ryerson",
+    "york",
+    "leafs",
+    "ontario"
+]
+london_associations = [
+    "uk",
+    "britain",
+    "british",
+    "england",
+    "queen",
+    "king",
+    "brit",
+    "mate",
+    "soho",
+    "bbc",
+    "flat"
+]
+paris_associations = [
+    "france",
+    "eiffel",
+    "louvre",
+    "macron",
+    "fr"
+]
+
 #### PREPROCESSING HELPER FUNCTIONS ####
 
 # Replace words with their lemmings
@@ -37,8 +117,8 @@ def prep_data(df):
     df['body'] = df['body'].str.replace('-', ' ')
     df['body'] = df['body'].str.replace('%', ' ')
 
-    # Remove basic punctuation
-    translator = str.maketrans('', '', '<>"°œ!\()*+,.:;=?[\\]^_`{|}~1234567890')
+    chars_to_replace = '<>"°œ!\\()*+,.:;=?[\\]^_`{|}~1234567890'
+    translator = str.maketrans(chars_to_replace, ' ' * len(chars_to_replace))
     df['body'] = df['body'].str.translate(translator)
 
     # Replace accented characters with unaccented characters
@@ -59,6 +139,15 @@ def prep_data(df):
     stop_words = set(stopwords.words('french'))
     df['body'] = df['body'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
 
+    return df
+
+def word_replacement(df):
+    # Replace words in df with their associated words
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in mtl_associations else 'montreal' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in tor_associations else 'toronto' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in london_associations else 'london' for word in x.split()]))
+    df['body'] = df['body'].apply(lambda x: ' '.join([word if word not in paris_associations else 'paris' for word in x.split()]))
+    
     return df
 
 def get_term_freq(df, subreddit, vocab):
@@ -129,7 +218,7 @@ def get_mutual_information(term_freq_df, class_count):
      P_T_notC = (np.array(class_count).reshape(1, -1) - term_freq_array + eps) / np.array(class_count).reshape(1, -1)
 
      # Calculate the marginal probabilities
-     total_samples = 540
+     total_samples = np.sum(class_count)
      P_T = np.sum(term_freq_array, axis=1) / total_samples
      P_C = class_count / total_samples
 
@@ -164,10 +253,12 @@ def remove_common_words(df, subreddits, thresh):
     # Remove these most common words from the vocabulary
     for word in list(agg_index)[:thresh]:
         vocab.remove(word)
+    
+    vocab.extend(['montreal', 'toronto', 'london', 'paris'])
 
     df['body'] = [' '.join(word for word in sample.split() if word in vocab) for sample in df['body']]
 
-    return df
+    return df, vocab
 
 #### TESTING HELPER FUNCTIONS ####
 
@@ -193,7 +284,6 @@ def generate_kaggle_submission(kaggle_test, kaggle_test_pred):
     }
 
     kaggle_test_df = pd.DataFrame(kaggle_test_dict)
-    kaggle_test_df['subreddit'] = kaggle_test_df['subreddit'].map({0: 'Toronto', 1: 'London', 2: 'Paris', 3: 'Montreal'})
 
     return kaggle_test_df
 
@@ -221,6 +311,7 @@ def mutual_info_transform(df, thresh):
     MI_N = thresh
     MI_df_top = MI_df.head(MI_N)
     top_words = MI_df_top['word'].tolist()
+    top_words.extend(['montreal', 'toronto', 'london', 'paris'])
 
     # Create a new dataframe with only the top words
     top_df = df.copy()
@@ -229,4 +320,4 @@ def mutual_info_transform(df, thresh):
     # Remove samples with no words
     top_df = top_df[top_df['body'] != '']
 
-    return top_df, top_words
+    return top_df
