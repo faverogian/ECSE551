@@ -1,7 +1,5 @@
 # An Ensemble Method for Classifying Reddit Posts
-#### ECSE 551: Introduction to Machine Learning  
-#### Department of ECE  
-#### McGill University  
+#### ECSE 551: Introduction to Machine Learning, Department of ECE, McGill University  
 
 Authors: Gian Favero, Maxime Favreau-Vachon, Hieu Thien Hong, 2023
 
